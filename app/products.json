@@ -1,0 +1,27 @@
+{
+    "comlink": [
+        {"title": "Comlink System"},
+        {"price": 15},
+        {"roleid": "842817113349423184"}
+    ],
+    "officerboost": [
+        {"title": "Officer Boost"},
+        {"price": 7.50},
+        {"roleid": "849299954107023360"}
+    ],
+    "scoreboard": [
+        {"title": "BFII Scoreboard"},
+        {"price": 10},
+        {"roleid": "855135847091666945"}
+    ],
+    "nextbots": [
+        {"title": "Nextbots"},
+        {"price": 20},
+        {"roleid": "856563948575785000"}
+    ],
+    "other": [
+        {"title": "Other"},
+        {"price": 0},
+        {"roleid": "842816489060827176"}
+    ]
+}
