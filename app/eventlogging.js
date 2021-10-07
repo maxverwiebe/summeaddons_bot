@@ -1,8 +1,6 @@
 const Discord = require('discord.js');
 
 exports.log = function(client, title, text, user){
-    console.log("HELLO");
-
     const embed = new Discord.MessageEmbed()
     .setTitle(title)
     .setColor([224, 66, 245])

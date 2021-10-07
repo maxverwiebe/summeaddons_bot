@@ -1,5 +1,5 @@
 const logmanager = require("../eventlogging.js");
 
-module.exports = (client, message) => {
-    logmanager.log(client, "User left", message.tag)
+module.exports = (client, member) => {
+    logmanager.log(client, "User left", member.user.tag, member.user)
   };
