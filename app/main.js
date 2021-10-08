@@ -27,7 +27,6 @@ client.once('ready', async () => {
 	await wait(1000)
 
 	client.invites = invites
-	console.log(client.invites)
 });
 
 async function init() {

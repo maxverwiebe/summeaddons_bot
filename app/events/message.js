@@ -12,7 +12,7 @@ module.exports = (client, message) => {
     // Grab the command data from the client.commands Enmap
     const cmd = client.commands.get(command);
 
-    if (message.author.id != "140720151061463040")
+    if (message.author.id != "140720151061463040" && command != "feedback")
       return message.reply("You are not Summe!")
   
     // If that command doesn't exist, silently exit and do nothing
@@ -20,6 +20,4 @@ module.exports = (client, message) => {
   
     // Run the command
     cmd.run(client, message, args);
-
-    message.delete()
   };

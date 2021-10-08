@@ -21,5 +21,7 @@ exports.run = (client, message, [id]) => {
         value: prods[index][1].price + " USD"})
     }
 
-    message.channel.send(embed);
+    message.channel.send(embed)
+
+    message.delete()
 }

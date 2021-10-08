@@ -112,7 +112,8 @@ exports.run = (client, message, [mention, product, priceOverride, currency, ...r
 
         client.channels.fetch('856120045776011264')
         .then(channel => channel.send(embed))
-        });
+    });
 
-        logmanager.log(client, "Product purchased", title + " " + price, target.user)
+    logmanager.log(client, "Product purchased", title + " " + price, target.user)
+    message.delete()
 }

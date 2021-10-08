@@ -34,4 +34,6 @@ exports.run = (client, message, [id]) => {
     } catch (err) {
         console.error(err)
     }
+
+    message.delete()
 }
