@@ -2,5 +2,6 @@
 	"token": "ODY5MjE4MjMxNTE1MjM4NDAx.YP7Ajw.xkAQZLbIRBgN7LUgwkjKGdSYqVA",
 	"prefix": "!",
 	"clientRole": "842816489060827176",
-	"logchannel": "883620868159324211"
+	"logchannel": "883620868159324211",
+	"mongodb": "mongodb+srv://admin:^7z^YbexZhrvNAu9^Qw9@cluster0.wzpkd.mongodb.net/summeaddonsbot?retryWrites=true&w=majority"
 }
