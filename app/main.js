@@ -12,7 +12,7 @@ client.products = products
 client.commands = new Collection()
 var invites = {}
 client.invites = {}
-client.database = require('./Database/Mongoose.js')
+client.database = require('./database/mongoose.js')
 
 const moneyconverter = require("./moneyconverter.js")
 

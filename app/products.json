@@ -6,7 +6,7 @@
     ],
     "officerboost": [
         {"title": "Officer Boost"},
-        {"price": 7.50},
+        {"price": 5},
         {"roleid": "849299954107023360"}
     ],
     "scoreboard": [
@@ -18,6 +18,11 @@
         {"title": "Nextbots"},
         {"price": 20},
         {"roleid": "856563948575785000"}
+    ],
+    "squads": [
+        {"title": "Squad System"},
+        {"price": 15},
+        {"roleid": "920734940235182091"}
     ],
     "other": [
         {"title": "Other"},
