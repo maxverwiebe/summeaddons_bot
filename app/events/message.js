@@ -12,7 +12,7 @@ module.exports = async(client, message) => {
     // Grab the command data from the client.commands Enmap
     const cmd = client.commands.get(command);
 
-    if (message.author.id != "140720151061463040" && command != "feedback")
+    if (message.author.id != "140720151061463040" && command != "feedback" && command != "return")
       return message.reply("You are not Summe!")
   
     // If that command doesn't exist, silently exit and do nothing

@@ -41,3 +41,10 @@ module.exports.getFromMonth = async function(monthYearString) {
     let result = await purchaseSchema.find(condition)
     return result
 }
+
+module.exports.getPurchasesFromUser = async function(userID) {
+    const condition = {"customerID": userID}
+
+    let result = await purchaseSchema.find(condition)
+    return result
+}
