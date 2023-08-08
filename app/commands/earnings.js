@@ -1,39 +1,35 @@
 const Discord = require('discord.js');
-const fs = require('fs');
+const moneyconverter = require("../moneyconverter.js")
 
-exports.run = (client, message, [id]) => {
-    
-    try {
-
-        if (!id) {
-            var d = new Date();
-            var y = d.getFullYear();
-            var m = d.getMonth() + 1;
-        
-            id = m + "-" + y
-        }
-
-        fs.readFile('./earned/' + id + '.txt', 'utf8', (err, data) => {
-        
-            if (!data)
-                return message.reply("Err1");
-
-            data
-
-            const embed = new Discord.MessageEmbed()
-            .setTitle("Earnings: " + id)
-            .setColor([255, 50, 50])
-            .setFooter("Summe‘s Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
-            .setDescription(data + " USD or rather " + (data / 1.19).toFixed(2) + " EUR")
-            .setTimestamp()
-
-            message.channel.send(embed);
-
-        })
-
-    } catch (err) {
-        console.error(err)
+exports.run = async (client, message, [monthYearString]) => { // 1-2021
+    if (!monthYearString) {
+        let timeNow = new Date(Date.now())
+        monthYearString = (timeNow.getMonth() + 1).toString() + "-" + timeNow.getFullYear().toString()
     }
 
-    message.delete()
+    let result = await client.database.getFromMonth(monthYearString)
+
+    var amount = 0
+
+    result.forEach(data => {
+        amount = data.productPriceUSD + amount
+    })
+
+    amount.toFixed(2)
+
+    const embed = new Discord.MessageEmbed()
+    .setTitle("Earnings: " + monthYearString)
+    .setColor([255, 80, 80])
+    .setFooter("Summe Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
+    .setDescription(amount + " USD or rather " + moneyconverter.convertToEUR(amount) + " EUR")
+    .setTimestamp()
+
+    .addFields({
+        name: "Purchases",
+        value: result.length
+    })
+
+    console.log(result)
+
+    message.channel.send(embed)
 }

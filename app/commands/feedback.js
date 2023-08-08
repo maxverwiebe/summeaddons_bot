@@ -5,7 +5,7 @@ function GetHelpEmbed(message, prods, error) {
     const helpEmbed = new Discord.MessageEmbed()
     .setTitle("How to: Feedback")
     .setColor([235, 52, 79])
-    .setFooter("Summe‘s Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
+    .setFooter("Summe Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
     .setAuthor(message.author.username, message.author.avatarURL())
     .setTimestamp()
 
@@ -83,7 +83,7 @@ exports.run = (client, message, [product, starsCount, ...restArgs]) => {
     const embed = new Discord.MessageEmbed()
     .setTitle(title)
     .setColor([245, 182, 66])
-    .setFooter("Summe‘s Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
+    .setFooter("Summe Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
     .setAuthor(message.author.username, message.author.avatarURL())
     .setTimestamp()
 

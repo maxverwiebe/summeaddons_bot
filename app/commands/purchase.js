@@ -1,31 +1,8 @@
-const Discord = require('discord.js');
-const fs = require('fs');
-const logmanager = require("../eventlogging.js");
+const Discord = require('discord.js')
+const fs = require('fs')
+const logmanager = require("../eventlogging.js")
+const moneyconverter = require("../moneyconverter.js")
 
-function SaveMoney(value, currency) {
-    if (currency != "USD") {
-        value = value * 1.19
-    }
-
-    var d = new Date();
-    var y = d.getFullYear();
-    var m = d.getMonth() + 1;
-
-    const stamp = m + "-" + y
-
-    console.log(stamp)
-
-    fs.readFile("./earned/"+stamp+".txt", "utf8", (err, data) => {
-        var money = 0
-        if (data)
-            money = parseInt(data)
-            value = parseInt(value)
-
-        money = money + value
-
-        fs.writeFileSync("./earned/"+stamp+".txt", money.toString())
-    })
-}
 
 exports.run = (client, message, [mention, product, priceOverride, currency, ...restArgs]) => {
     const target = message.mentions.members.first();
@@ -37,20 +14,34 @@ exports.run = (client, message, [mention, product, priceOverride, currency, ...r
     if (message.mentions.members.size === 0)
         return message.reply("Err2");
 
-    console.log(productObj)
     var price = productObj[1].price
     const title = productObj[0].title
     const roleID = productObj[2].roleid
     const timestamp = Date.now()
     var notes = restArgs.join(' ')
 
-    if (priceOverride) {
-        price = priceOverride + " " + currency
-        SaveMoney(priceOverride, currency)
+    if (priceOverride !== undefined) {
+        if (currency !== undefined) {
+            if (currency === "USD") {
+                price = priceOverride
+            }
+
+            if (currency === "EUR") {
+                price = moneyconverter.convertToUSD(priceOverride)
+            }
+        }
     }
-    else {
-        SaveMoney(price, "USD")
-        price = price.toString() + " USD"
+
+    let timeNow = new Date(Date.now())
+
+    var data = {
+        monthYear: (timeNow.getMonth() + 1).toString() + "-" + timeNow.getFullYear().toString(),
+        timestamp: Date.now(),
+        productIndex: product,
+        productPriceUSD: price,
+        customerName: target.user.username,
+        customerID: target.user.id,
+        notes: notes,
     }
 
     let productRole = message.guild.roles.cache.get(roleID);
@@ -59,60 +50,43 @@ exports.run = (client, message, [mention, product, priceOverride, currency, ...r
     let costumerRole = message.guild.roles.cache.get(client.config.clientRole);
     if (costumerRole) target.roles.add(costumerRole).catch(console.error);
 
-    var date = new Date(timestamp);
-
-    const time = date.getDate()+
-    "/"+(date.getMonth()+1)+
-    "/"+date.getFullYear()+
-    " "+date.getHours()+
-    ":"+date.getMinutes()+
-    ":"+date.getSeconds()
-
-    fs.readdir("./purchases", (err, files) => {
-        const purchaseID = files.length
-
-        let data = {
-            productIndex: product,
-            productName: title,
-            productPrice: price,
-            customerName: target.user.username,
-            customerID: target.user.id,
-            timestamp: timestamp,
-            notes: notes,
-        };
-        
-        data = JSON.stringify(data);
-        fs.writeFileSync('./purchases/' + purchaseID + '.json', data);
-
+    client.database.createPurchase(data).then(schema=>{
         const embed = new Discord.MessageEmbed()
-        .setTitle("Purchase confirmation")
-        //.setThumbnail(target.user.avatarURL())
-        .setColor([0, 255, 0])
-        .setDescription("Here are the details of your purchase.")
-        .setFooter("Summe‘s Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
-        .setAuthor(message.author.username, message.author.avatarURL())
-        
-        .setTimestamp()
+            .setTitle("Purchase confirmation")
+            .setColor("#149500")
+            .setDescription("Here are the details of your purchase.")
+            .setFooter("Summe Addons", "https://cdn.shopify.com/s/files/1/1061/1924/products/Money_with_Wings_Emoji_grande.png?v=1571606064")
+            .setAuthor(message.author.username, message.author.avatarURL())
+            .setImage("https://i.imgur.com/YyNa50C.png")
+            .setTimestamp()
 
-        .addFields({ name: ":gem: Product",
-            value: title + " | " + price})
+            .addFields({
+                name: ":gem: Product",
+                value: title + " | " + price + " USD"
+            })
 
-        .addFields({ name: ":eyes: Customer",
-            value: target.user.username + " | " + target.user.id})
+            .addFields({
+                name: ":eyes: Customer",
+                value: target.user.username + " | " + target.user.id
+            })
 
-        .addFields({ name: ":blue_book: Purchase ID",
-            value: purchaseID + " | " + time})
+            .addFields({
+                name: ":blue_book: Purchase ID",
+                value: schema._id
+            })
 
         if (notes) {
-            embed.addFields({ name: ":warning: Notes",
-                value: notes})
+            embed.addFields({
+                name: ":warning: Notes",
+                value: notes
+            })
         }
 
         target.send(embed)
 
         client.channels.fetch('856120045776011264')
         .then(channel => channel.send(embed))
-    });
+    })
 
     logmanager.log(client, "Product purchased", title + " " + price, target.user)
     message.delete()
